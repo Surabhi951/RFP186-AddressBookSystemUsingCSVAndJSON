@@ -1,5 +1,6 @@
 package com.bridgelabz;
 
+import com.google.gson.Gson;
 import com.opencsv.CSVWriter;
 
 import java.io.*;
@@ -9,6 +10,7 @@ import java.util.List;
 
 public class FileIOServices {
     static final String FILE_PATH = "C:\\Users\\chetan bhagat\\IdeaProjects\\RFP186-AddressBookSystemUsingCSVAndJOSN\\src\\main\\resources";
+
 
     public enum FileType {
         TXT, CSV
@@ -56,5 +58,22 @@ public class FileIOServices {
         }
         csvWriter.writeAll(data);
         fileWriter.close();
+    }
+
+    public static void writeJsonFile(ArrayList<ContactPerson> addressBook, String addressBookName) throws IOException {
+        File file = new File(FILE_PATH + addressBookName + ".json");
+        boolean isCreated = file.createNewFile();
+        if (!isCreated) {
+            file.delete();
+            file.createNewFile();
+        }
+        FileWriter writer =new FileWriter(file);
+        Gson gson=new Gson();
+        String data="";
+        for (ContactPerson person : addressBook) {
+            data=data.concat(gson.toJson(person)+"\n");
+        }
+        writer.write(data);
+        writer.close();
     }
 }
